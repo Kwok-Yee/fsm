@@ -1,18 +1,125 @@
+#define SDL_MAIN_HANDLED
+#include "SDL.h"
 #include <iostream>
-#include <SDL.h>
-using namespace std;
+#include "Command.h"
+#include "InputHandler.h"
+#include "Player.h"
+#include "JumpCommand.h"
+#include "FireCommand.h"
+#include "CrouchCommand.h"
+#include "ShieldCommand.h"
+#include "MeleeCommand.h"
 
-int main(int argc, char * argv[])
+//Screen dimension constants
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+
+//Starts up SDL and creates window
+bool init();
+
+//Frees media and shuts down SDL
+void close();
+
+//The window we'll be rendering to
+SDL_Window* gWindow = NULL;
+
+//The surface contained by the window
+SDL_Surface* gScreenSurface = NULL;
+
+//The image we will load and show on the screen
+SDL_Surface* gXOut = NULL;
+
+bool init()
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+	//Initialization flag
+	bool success = true;
+
+	//Initialize SDL
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		cout << "SDL initialization failed. SDL Error: " << SDL_GetError();
+		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		success = false;
 	}
 	else
 	{
-		cout << "SDL initialization succeeded!";
+		//Create window
+		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		if (gWindow == NULL)
+		{
+			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			success = false;
+		}
+		else
+		{
+			//Get window surface
+			gScreenSurface = SDL_GetWindowSurface(gWindow);
+		}
 	}
 
-	cin.get();
+	return success;
+}
+
+void close()
+{
+	//Deallocate surface
+	SDL_FreeSurface(gXOut);
+	gXOut = NULL;
+
+	//Destroy window
+	SDL_DestroyWindow(gWindow);
+	gWindow = NULL;
+
+	//Quit SDL subsystems
+	SDL_Quit();
+}
+
+int main()
+{
+	if (!init())
+	{
+		printf("Failed to initialize!\n");
+	}
+	else
+	{
+		SDL_SetMainReady();
+
+		InputHandler inputHandler;
+		Player* john = new Player("John");
+		Command* jump = new JumpCommand(john);
+		Command* fire = new FireCommand(john);
+		Command* crouch = new CrouchCommand(john);
+		Command* shield = new ShieldCommand(john);
+		Command* melee = new MeleeCommand(john);
+		inputHandler.setCommand(1, jump); // 1 for jump
+		inputHandler.setCommand(2, fire); // 2 for fire
+		inputHandler.setCommand(3, crouch); // 3 for crouch
+		inputHandler.setCommand(4, shield); // 4 for shield
+		inputHandler.setCommand(5, melee); // 5 for melee
+
+		bool quit = false;
+
+		SDL_Event event;
+
+		while (!quit)
+		{
+			while (SDL_PollEvent(&event) != 0)
+			{
+				if (event.type == SDL_QUIT)
+				{
+					quit = true;
+				}
+				else if (event.type == SDL_KEYDOWN)
+				{
+					inputHandler.handleInput(event);
+
+				}
+
+				//Apply the image
+				SDL_BlitSurface(gXOut, NULL, gScreenSurface, NULL);
+				//Update the surface
+				SDL_UpdateWindowSurface(gWindow);
+			}
+		}
+	}
 	return 0;
 }
