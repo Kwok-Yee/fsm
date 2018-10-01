@@ -85,11 +85,15 @@ int main()
 
 		InputHandler inputHandler;
 		Player* john = new Player("John");
+		Player* david = new Player("David");
+		Player* sam = new Player("Sam");
+		Player* mitch = new Player("Mitch");
+		Player* ryan = new Player("Ryan");
 		Command* jump = new JumpCommand(john);
-		Command* fire = new FireCommand(john);
-		Command* crouch = new CrouchCommand(john);
-		Command* shield = new ShieldCommand(john);
-		Command* melee = new MeleeCommand(john);
+		Command* fire = new FireCommand(david);
+		Command* crouch = new CrouchCommand(sam);
+		Command* shield = new ShieldCommand(mitch);
+		Command* melee = new MeleeCommand(ryan);
 		inputHandler.setCommand(1, jump); // 1 for jump
 		inputHandler.setCommand(2, fire); // 2 for fire
 		inputHandler.setCommand(3, crouch); // 3 for crouch
