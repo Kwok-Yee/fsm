@@ -94,11 +94,11 @@ int main()
 		Command* crouch = new CrouchCommand(sam);
 		Command* shield = new ShieldCommand(mitch);
 		Command* melee = new MeleeCommand(ryan);
-		inputHandler.setCommand(1, jump); // 1 for jump
-		inputHandler.setCommand(2, fire); // 2 for fire
-		inputHandler.setCommand(3, crouch); // 3 for crouch
-		inputHandler.setCommand(4, shield); // 4 for shield
-		inputHandler.setCommand(5, melee); // 5 for melee
+		inputHandler.bindKeysToCommands(1, jump); // 1 for jump
+		inputHandler.bindKeysToCommands(2, fire); // 2 for fire
+		inputHandler.bindKeysToCommands(3, crouch); // 3 for crouch
+		inputHandler.bindKeysToCommands(4, shield); // 4 for shield
+		inputHandler.bindKeysToCommands(5, melee); // 5 for melee
 
 		bool quit = false;
 

@@ -6,7 +6,7 @@ class InputHandler
 {
 public:
 	void handleInput(SDL_Event &event);
-	void setCommand(int num, Command* cmd);
+	void bindKeysToCommands(int num, Command* cmd);
 private:
 	Command* keyOne;
 	Command* keyTwo;

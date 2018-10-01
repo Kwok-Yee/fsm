@@ -42,7 +42,7 @@ void InputHandler::handleInput(SDL_Event &event)
 	}
 }
 
-void InputHandler::setCommand(int num, Command * cmd)
+void InputHandler::bindKeysToCommands(int num, Command * cmd)
 {
 	curCommand = cmd;
 	switch (num)
