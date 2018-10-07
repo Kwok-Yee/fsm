@@ -1,14 +1,8 @@
 #define SDL_MAIN_HANDLED
 #include "SDL.h"
 #include <iostream>
-#include "Command.h"
 #include "InputHandler.h"
 #include "Player.h"
-#include "JumpCommand.h"
-#include "FireCommand.h"
-#include "CrouchCommand.h"
-#include "ShieldCommand.h"
-#include "MeleeCommand.h"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 800;
@@ -85,20 +79,6 @@ int main()
 
 		InputHandler inputHandler;
 		Player* john = new Player("John");
-		Player* david = new Player("David");
-		Player* sam = new Player("Sam");
-		Player* mitch = new Player("Mitch");
-		Player* ryan = new Player("Ryan");
-		Command* jump = new JumpCommand(john);
-		Command* fire = new FireCommand(david);
-		Command* crouch = new CrouchCommand(sam);
-		Command* shield = new ShieldCommand(mitch);
-		Command* melee = new MeleeCommand(ryan);
-		inputHandler.bindKeysToCommands(1, jump); // 1 for jump
-		inputHandler.bindKeysToCommands(2, fire); // 2 for fire
-		inputHandler.bindKeysToCommands(3, crouch); // 3 for crouch
-		inputHandler.bindKeysToCommands(4, shield); // 4 for shield
-		inputHandler.bindKeysToCommands(5, melee); // 5 for melee
 
 		bool quit = false;
 

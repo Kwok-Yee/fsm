@@ -1,4 +1,6 @@
 #pragma once
+#include "Animation.h"
+#include "Idle.h"
 #include <iostream>
 #include <string>
 
@@ -7,58 +9,14 @@ using namespace std;
 class Player
 {
 public:
-	Player(string n) { name = n; };
-
-	void jump() { 
-		printCommand(name + " jumps!");
-		setPreviousCommand();
-	};
-	void undoJump() { 
-		printCommand(name + " stops jump.");
-		setPreviousCommand();
+	Player(string n)
+	{
+		name = n;
+		animation.setCurrent(new Idle());
 	};
 
-	void fire() {
-		printCommand(name + " fires!");
-		setPreviousCommand();
-	};
-	void undoFire() {
-		printCommand(name + " stops firing");
-		setPreviousCommand();
-	};
 
-	void crouch() {
-		printCommand(name + " crouches!");
-		setPreviousCommand();
-	};
-	void undoCrouch() {
-		printCommand(name + " stops crouching");
-		setPreviousCommand();
-	};
-
-	void shield() {
-		printCommand(name + " uses shield!");
-		setPreviousCommand();
-	};
-	void undoShield() {
-		printCommand(name + " stops shield");
-		setPreviousCommand();
-	};
-
-	void melee() {
-		printCommand(name + " uses melee!");
-		setPreviousCommand();
-	};
-	void undoMelee() {
-		printCommand(name + " stops melee");
-		setPreviousCommand();
-	};
-
-	void printCommand(string msg) { currentCommand = msg; cout << currentCommand << endl; };
-	void setPreviousCommand() { previousCommand = currentCommand; };
-	string getPreviousCommand() { return previousCommand; };
 private:
+	Animation animation;
 	string name;
-	string currentCommand;
-	string previousCommand;
 };
