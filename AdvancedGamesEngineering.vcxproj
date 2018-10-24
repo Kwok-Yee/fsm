@@ -76,11 +76,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Kwok Yee Chu\Desktop\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Kwok Yee Chu\Desktop\SDL2_image-2.0.3\include;C:\Users\Kwok Yee Chu\Desktop\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\Kwok Yee Chu\Desktop\SDL2-2.0.8\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Kwok Yee Chu\Desktop\SDL2_image-2.0.3\lib\x86;C:\Users\Kwok Yee Chu\Desktop\SDL2-2.0.8\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -131,10 +131,13 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Climbing.h" />
+    <ClInclude Include="ClimbingCommand.h" />
+    <ClInclude Include="Command.h" />
     <ClInclude Include="Idle.h" />
+    <ClInclude Include="IdleCommand.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Jumping.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="JumpingCommand.h" />
     <ClInclude Include="State.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

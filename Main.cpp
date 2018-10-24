@@ -1,109 +1,84 @@
 #define SDL_MAIN_HANDLED
 #include "SDL.h"
+#include <SDL_image.h>
 #include <iostream>
 #include "InputHandler.h"
-#include "Player.h"
+#include "Command.h"
+#include "IdleCommand.h"
+#include "JumpingCommand.h"
+#include "ClimbingCommand.h"
 
-//Screen dimension constants
+// Screen dimension constants
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
-//Starts up SDL and creates window
-bool init();
+// The window we'll be rendering to
+SDL_Window* window = NULL;
 
-//Frees media and shuts down SDL
-void close();
+// The surface image
+SDL_Surface* image = NULL;
 
-//The window we'll be rendering to
-SDL_Window* gWindow = NULL;
+// The renderer
+SDL_Renderer * renderer = NULL;
 
-//The surface contained by the window
-SDL_Surface* gScreenSurface = NULL;
-
-//The image we will load and show on the screen
-SDL_Surface* gXOut = NULL;
-
-bool init()
-{
-	//Initialization flag
-	bool success = true;
-
-	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-		success = false;
-	}
-	else
-	{
-		//Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if (gWindow == NULL)
-		{
-			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-			success = false;
-		}
-		else
-		{
-			//Get window surface
-			gScreenSurface = SDL_GetWindowSurface(gWindow);
-		}
-	}
-
-	return success;
-}
-
-void close()
-{
-	//Deallocate surface
-	SDL_FreeSurface(gXOut);
-	gXOut = NULL;
-
-	//Destroy window
-	SDL_DestroyWindow(gWindow);
-	gWindow = NULL;
-
-	//Quit SDL subsystems
-	SDL_Quit();
-}
+// The texture that will be created
+SDL_Texture* texture = NULL;
 
 int main()
 {
-	if (!init())
+	SDL_Init(SDL_INIT_VIDEO);
+	IMG_Init(IMG_INIT_PNG);
+
+	window = SDL_CreateWindow("Practical 3 - Finite State Machine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	image = IMG_Load("spritesheet.png");
+	renderer = SDL_CreateRenderer(window, -1, 0);
+	texture = SDL_CreateTextureFromSurface(renderer, image);
+
+	SDL_Event event;
+	bool quit = false;
+
+	InputHandler inputHandler;
+
+	Animation* animation = new Animation();
+	Command* idleCommand = new IdleCommand(animation);
+	Command* jumpingCommand = new JumpingCommand(animation);
+	Command* climbingCommand = new ClimbingCommand(animation);
+	inputHandler.bindKeysToCommands(1, idleCommand);
+	inputHandler.bindKeysToCommands(2, jumpingCommand);
+	inputHandler.bindKeysToCommands(3, climbingCommand);
+
+	// Set background color
+	SDL_SetRenderDrawColor(renderer, 168, 230, 255, 255);
+	SDL_RenderClear(renderer);
+
+	//
+	SDL_Rect srcRect = { 0, 0, 64, 64 };
+	SDL_Rect dstRect = { 10, 10, 64, 64 };
+
+	while (!quit)
 	{
-		printf("Failed to initialize!\n");
-	}
-	else
-	{
-		SDL_SetMainReady();
 
-		InputHandler inputHandler;
-		Player* john = new Player("John");
-
-		bool quit = false;
-
-		SDL_Event event;
-
-		while (!quit)
+		while (SDL_PollEvent(&event) != 0)
 		{
-			while (SDL_PollEvent(&event) != 0)
+			if (event.type == SDL_QUIT)
 			{
-				if (event.type == SDL_QUIT)
-				{
-					quit = true;
-				}
-				else if (event.type == SDL_KEYDOWN)
-				{
-					inputHandler.handleInput(event);
-
-				}
-
-				//Apply the image
-				SDL_BlitSurface(gXOut, NULL, gScreenSurface, NULL);
-				//Update the surface
-				SDL_UpdateWindowSurface(gWindow);
+				quit = true;
+			}
+			else if (event.type == SDL_KEYDOWN)
+			{
+				inputHandler.handleInput(event);
 			}
 		}
+
+		SDL_RenderCopy(renderer, texture, &srcRect, &dstRect);
+		SDL_RenderPresent(renderer);
 	}
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(image);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	IMG_Quit();
+	SDL_Quit();
+
 	return 0;
 }
