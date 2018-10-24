@@ -51,17 +51,18 @@ int main()
 	SDL_SetRenderDrawColor(renderer, 168, 230, 255, 255);
 	SDL_RenderClear(renderer);
 
-	//
+	// The source and destination for the sprite
 	SDL_Rect srcRect = { 0, 0, 64, 64 };
 	SDL_Rect dstRect = { 10, 10, 64, 64 };
 
 	while (!quit)
 	{
+		// Calculate tickrate
 		int ticks = SDL_GetTicks();
 		int tickRate = ticks / 250;
 		int sprite = tickRate % 4;
 
-		if (animation->getAnimationState() == 1) // if Jumping, set sprite to divide it by 3 sprites
+		if (animation->getAnimationState() == 1) // Jumping has three sprites
 			sprite = tickRate % 3;
 
 		switch (animation->getAnimationState())
