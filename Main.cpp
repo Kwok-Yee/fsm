@@ -89,7 +89,7 @@ int main()
 			}
 			else if (event.type == SDL_KEYUP)
 			{
-
+				animation->idle();
 			}
 		}
 		SDL_RenderClear(renderer);
