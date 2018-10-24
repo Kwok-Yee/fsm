@@ -57,8 +57,27 @@ int main()
 
 	while (!quit)
 	{
+		int ticks = SDL_GetTicks();
+		int tickRate = ticks / 250;
+		int sprite = tickRate % 4;
 
-		while (SDL_PollEvent(&event) != 0)
+		if (animation->getAnimationState() == 1) // if Jumping, set sprite to divide it by 3 sprites
+			sprite = tickRate % 3;
+
+		switch (animation->getAnimationState())
+		{
+		case 0:
+			srcRect = { sprite * 64, 0, 64, 64 }; // IDLE
+			break;
+		case 1:
+			srcRect = { sprite * 64, 192, 64, 64 }; // JUMPING
+			break;
+		case 2:
+			srcRect = { sprite * 64, 256, 64, 64 }; // CLIMBING
+			break;
+		}
+
+		while (SDL_PollEvent(&event) != NULL)
 		{
 			if (event.type == SDL_QUIT)
 			{
@@ -68,8 +87,12 @@ int main()
 			{
 				inputHandler.handleInput(event);
 			}
-		}
+			else if (event.type == SDL_KEYUP)
+			{
 
+			}
+		}
+		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, texture, &srcRect, &dstRect);
 		SDL_RenderPresent(renderer);
 	}

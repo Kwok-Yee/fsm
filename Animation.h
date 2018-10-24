@@ -6,7 +6,10 @@ class Animation
 public:
 	Animation();
 	void setCurrent(State* s);
+	int getAnimationState();
 	void idle();
 	void jumping();
 	void climbing();
+private:
+	int animationState;
 };
